@@ -1,8 +1,4 @@
-import io
-import base64
-import barcode
 import uuid
-from barcode.writer import ImageWriter
 from django.db import models
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.utils.translation import gettext_lazy as _
@@ -79,7 +75,7 @@ class Invitation(models.Model):
     email = models.EmailField()
     job = models.CharField(max_length=100)
     code = models.CharField(max_length=20, unique=True, editable=False)
-    barcode_base64 = models.TextField(blank=True, null=True, unique=True)
+
     def save(self, *args, **kwargs):
         # Ensure a unique code is generated
         if not self.code:
@@ -88,15 +84,9 @@ class Invitation(models.Model):
                 if not Invitation.objects.filter(code=new_code).exists():
                     self.code = new_code
                     break
-
-        # Generate barcode from that unique code
-        buffer = io.BytesIO()
-        ean = barcode.get('code128', self.code, writer=ImageWriter())
-        ean.write(buffer)
-        barcode_bytes = buffer.getvalue()
-        self.barcode_base64 = base64.b64encode(barcode_bytes).decode('utf-8')
-
         super().save(*args, **kwargs)
+
+
     def pdf(self):
         return mark_safe(f'<a target="_blank"  href="/invitation-pdf/{self.id}/"><i class="fa fa-file-pdf"></i></a>')
     
