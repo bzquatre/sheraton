@@ -32,8 +32,8 @@
         \textcolor{gray}{\Large Carte d'invitation}
     \end{minipage} &
     {% if invitation.client.logo %}
-    \includegraphics[width=2.5cm]{ {{invitation.client.logo.url}} }
-{% endif %}
+    \includegraphics[width=2.5cm]{ {{ invitation.client.logo.url[7:] }} }
+    {% endif %}
     
 \end{tabular}
 \end{center}
