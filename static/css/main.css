@@ -1,0 +1,3 @@
+html body div aside div nav ul li:first-child a p {
+    display: none;
+  }
