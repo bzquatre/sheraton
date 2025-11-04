@@ -70,11 +70,11 @@ class Invitation(models.Model):
         editable=False
     )
     client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='invitations')
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
+    first_name = models.CharField(verbose_name="Prénom" ,max_length=100)
+    last_name = models.CharField(verbose_name="Nom" ,max_length=100)
     email = models.EmailField()
-    job = models.CharField(max_length=100)
-    code = models.CharField(max_length=20, unique=True, editable=False)
+    job = models.CharField(verbose_name="Fonction" ,max_length=100)
+    code = models.CharField(verbose_name="Code" ,max_length=20, unique=True, editable=False)
 
     def save(self, *args, **kwargs):
         # Ensure a unique code is generated
@@ -94,7 +94,10 @@ class Invitation(models.Model):
         return f"{self.code}"
 
 class Visitor(models.Model):
-    guest = models.OneToOneField(Invitation, on_delete=models.CASCADE)
+    class Meta:
+        verbose_name = "Visiteur"
+        verbose_name_plural = "Visiteurs"
+    guest = models.OneToOneField(Invitation,verbose_name="Invité", on_delete=models.CASCADE)
     date = models.DateField(auto_now_add=True)
-    time = models.TimeField(auto_now_add=True)
+    time = models.TimeField(auto_now_add=True,verbose_name="Temp")
     

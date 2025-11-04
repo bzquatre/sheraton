@@ -6,11 +6,15 @@ from django.http import HttpResponseRedirect
 
 @admin.register(Client)
 class ClientAdmin(UserAdmin):
+
     fieldsets = UserAdmin.fieldsets + (
-        ('Additional Info', {'fields': ('name', 'logo','number_of_guests')}),
+        ('Informations', {'fields': ('name', 'logo','number_of_guests')}),
     )
     list_display = ('username', 'name', 'email', 'is_staff')
-
+    list_filter = []
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.filter(is_superuser=False)
 
 @admin.register(Invitation)
 class InvitationAdmin(admin.ModelAdmin):
@@ -75,10 +79,10 @@ class VisitorAdmin(admin.ModelAdmin):
     list_display= ('guest','guest_first_name','guest_last_name','guest_client','time')
     def guest_first_name(self, obj):
         return obj.guest.first_name
-    guest_first_name.short_description = 'First Name'
+    guest_first_name.short_description = 'Prénom'
     def guest_last_name(self, obj):
         return obj.guest.last_name
-    guest_last_name.short_description = 'Last Name'
+    guest_last_name.short_description = 'Nom'
     def guest_client(self, obj):
         return obj.guest.client.name
     guest_client.short_description = 'Client'

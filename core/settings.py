@@ -125,7 +125,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'fr'
 
 TIME_ZONE = 'UTC'
 
@@ -157,7 +157,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 AUTH_USER_MODEL = 'invitation.Client'
 JAZZMIN_SETTINGS = {
     # title of the window (Will default to current_admin_site.site_title if absent or None)
-    "site_title": "Sheraton Admin",
+    "site_title": "Sheraton",
 
     # Title on the login screen (19 chars max) (defaults to current_admin_site.site_header if absent or None)
     "site_header": "Sheraton",
@@ -181,7 +181,7 @@ JAZZMIN_SETTINGS = {
     "site_icon": None,
 
     # Welcome text on the login screen
-    "welcome_sign": "Welcome to the Sheraton birthday",
+    "welcome_sign": "Bienvenue à l'anniversaire du Sheraton",
 
     # Copyright on the footer
     "copyright":  "Bouzegzeg Zakaria 2025",
@@ -222,7 +222,7 @@ JAZZMIN_SETTINGS = {
     "navigation_expanded": True,
 
     # Hide these apps when generating side menu e.g (auth)
-    "hide_apps": [],
+    "hide_apps": ["Auth"],
 
     # Hide these models when generating side menu (e.g auth.user)
     "hide_models": [],
