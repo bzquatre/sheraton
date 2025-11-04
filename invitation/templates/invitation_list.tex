@@ -1,46 +1,75 @@
 \documentclass[12pt,a4paper]{article}
-\usepackage[margin=1.5cm]{geometry}
+\usepackage[margin=0cm]{geometry}
 \usepackage{graphicx}
 \usepackage{setspace}
 \usepackage{xcolor}
 \usepackage{tikz}
 \usepackage{fontspec}
 \usepackage{qrcode}
-
+\usepackage{fancyhdr}
+{% graphicspath %}
 \pagestyle{empty}
 
 \begin{document}
 {% for invitation in invitations %}
+% --- Top Half: Image Banner ---
+\begin{center}
+    \vspace*{-1cm} % adjust if needed
+    \includegraphics[width=\textwidth,height=0.40\textheight,keepaspectratio]{images/hotel.jpg}
+\end{center}
+
+\vspace{0.5cm} % space between image and info
+
+% --- Bottom Half: Invitation Information ---
 \begin{center}
 
+\begin{center}
+\begin{tabular}{c c c} % <--- column alignment: 3 centered columns
+    \includegraphics[width=2.5cm]{images/logo.png} &
+    \begin{minipage}{0.5\textwidth}
+        \centering
+        \Huge \textbf{ {{invitation.client.name}} } \\[0.3cm]
+        \textcolor{gray}{\Large Carte d'invitation}
+    \end{minipage} &
+    {% if invitation.client.logo %}
+    \includegraphics[width=2.5cm]{ {{invitation.client.logo.url}} }
+{% endif %}
+    
+\end{tabular}
+\end{center}
 
-\Huge \textbf{ {{ invitation.client.name }} } \\[0.3cm]
-\textcolor{gray}{\Large Invitation Card} \\[0.8cm]
-
+\vspace{1cm}
 \begin{tikzpicture}
-\node[fill=gray!10,rounded corners=10pt,inner sep=10pt]{
+\node[,rounded corners=10pt,inner sep=10pt]{
     \begin{minipage}{0.85\textwidth}
-  
-        \textbf{Name:} {{ invitation.first_name }} {{ invitation.last_name }} \\[0.3cm]
-        \textbf{Job:} {{ invitation.job }} \\[0.3cm]
-        \textbf{Email:} {{ invitation.email }} \\[0.3cm]
-   
+        \large\textit{Cher(ère) \textbf{ {{ invitation.first_name }} {{ invitation.last_name }} },
+Nous avons le plaisir de vous inviter à l’événement organisé par Sheraton.
+Votre présence serait un véritable honneur et contribuerait au succès de cette occasion spéciale.
+}
+
+        📍 Lieu : Hotel Sheraton \\
+        📅 Date : 13/11/2025 \\
+        🕒 Heure :11h 00 \\
     \end{minipage}
 };
 \end{tikzpicture}
-
-
-
 
 \vspace{1cm}
 \qrcode[height=4cm]{ {{ invitation.code }} }
 \vspace{1cm}
 
-\textbf{Invitation Code:} \texttt{ {{ invitation.code }} } \\[0.5cm]
-\vspace{1cm}
-\textit{Please bring this invitation with you to the event.}
+\textbf{Code d'invitation:} \texttt{ {{ invitation.code }} } \\
+\textit{Nous vous prions d’apporter cette invitation lors de votre arrivée.}
 
 \end{center}
 \newpage
 {% endfor %}
 \end{document}
+
+
+
+
+
+
+
+

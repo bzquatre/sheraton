@@ -25,7 +25,7 @@ def invitation_bulk_view(request):
     Example URL: /invitations/bulk/?ids=1,2,3
     """
     ids_str = request.GET.get("ids", "")
-    ids = [int(i) for i in ids_str.split(",") if i.isdigit()]
+    ids = [i for i in ids_str.split(",")]
 
     invitations = Invitation.objects.filter(id__in=ids)
 
