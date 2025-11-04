@@ -6,10 +6,19 @@ from django.http import HttpResponseRedirect
 
 @admin.register(Client)
 class ClientAdmin(UserAdmin):
+
     fieldsets = (
-        (None, {'fields': ('email','name', 'logo','number_of_guests')}),
+        (None, {'fields': ('name','logo','number_of_guests')}),
+        ("Compte", {'fields': ('email', 'password')}),
+        ('Permissions', {'fields': ('is_staff', 'is_active', 'is_superuser', 'groups', 'user_permissions')}),
     )
-    list_display = ('username', 'name', 'email', 'is_staff')
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('name','email', 'password1', 'password2',  'logo','number_of_guests')}
+        ),
+    )
+    list_display = ('email', 'name','number_of_guests' )
     list_filter = []
     def get_queryset(self, request):
         qs = super().get_queryset(request)

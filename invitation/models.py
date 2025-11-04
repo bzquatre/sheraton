@@ -18,8 +18,8 @@ class Client(AbstractUser):
     )
     name = models.CharField(_("Client Name"), max_length=100)
     logo = models.ImageField(_("Logo"), upload_to='logos/', blank=True, null=True)
-    email = models.EmailField(_("Email Address"), unique=True)
-    number_of_guests = models.IntegerField(_("Number of Guests"), default=0)
+    email = models.EmailField(_("Email"), unique=True)
+    number_of_guests = models.IntegerField(_("Nombre d'invités"), default=0)
 
     # Ensure staff status true by default
     is_staff = models.BooleanField(default=True)
@@ -38,8 +38,8 @@ class Client(AbstractUser):
         help_text='Specific permissions for this client.',
     )
 
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email', 'name']
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['name']
 
     def save(self, *args, **kwargs):
         # Ensure is_staff is True by default
