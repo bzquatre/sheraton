@@ -1,8 +1,10 @@
-from django.contrib import admin
+from django.contrib import admin ,messages
+from django.utils import timezone
 from django.contrib.auth.admin import UserAdmin
 from .models import Client, Invitation,Visitor
 from django.urls import reverse
 from django.http import HttpResponseRedirect
+from django.db import IntegrityError
 
 @admin.register(Client)
 class ClientAdmin(UserAdmin):
@@ -86,6 +88,45 @@ class InvitationAdmin(admin.ModelAdmin):
 @admin.register(Visitor)
 class VisitorAdmin(admin.ModelAdmin):
     list_display= ('guest','guest_first_name','guest_last_name','guest_client','time')
+    search_fields = ['guest__code']
+    search_help_text = "Scan a QR code to check and log the visitor."
+    class Media:
+        js = ('js/clear_search.js',)
+    def get_search_results(self, request, queryset, search_term):
+        # Try to find an exact QR code match
+        match = Invitation.objects.filter(code__iexact=search_term).first()
+        if match:
+            try:
+                
+                    # Log the scan
+                    Visitor.objects.create(guest=match)
+
+                    # Show success message in Django admin
+                    self.message_user(
+                        request,
+                        f"✅  {match}  Cette invitation a été scannée et enregistrée avec succès.",
+                        messages.SUCCESS
+                    )
+            except IntegrityError:
+                    # Handle duplicate scan attempt
+                    self.message_user(
+                        request,
+                        f"⚠️  '{match}' Cette invitation a déjà été utilisée.",
+                        messages.WARNING
+                    )
+
+                    # Return only the matching visitor
+            return super().get_search_results(request, queryset, search_term)
+
+        # Show error message if not found
+        if search_term:
+            self.message_user(
+                request,
+                f"❌ '{search_term}' Cette carte d’invitation n’existe pas.",
+                messages.ERROR
+            )
+
+        return super().get_search_results(request, queryset, search_term)
     def guest_first_name(self, obj):
         return obj.guest.first_name
     guest_first_name.short_description = 'Prénom'
