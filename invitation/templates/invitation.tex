@@ -1,0 +1,46 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{fontspec}
+\usepackage{qrcode}
+
+\setmainfont{Arial}
+\pagestyle{empty}
+
+\begin{document}
+
+\begin{center}
+
+
+\Huge \textbf{ {{ invitation.client.name }} } \\[0.3cm]
+\textcolor{gray}{\Large Invitation Card} \\[0.8cm]
+
+\begin{tikzpicture}
+\node[fill=gray!10,rounded corners=10pt,inner sep=10pt]{
+    \begin{minipage}{0.85\textwidth}
+  
+        \textbf{Name:} {{ invitation.first_name }} {{ invitation.last_name }} \\[0.3cm]
+        \textbf{Job:} {{ invitation.job }} \\[0.3cm]
+        \textbf{Email:} {{ invitation.email }} \\[0.3cm]
+   
+    \end{minipage}
+};
+\end{tikzpicture}
+
+
+
+
+\vspace{1cm}
+\qrcode[height=4cm]{ {{ invitation.code }} }
+\vspace{1cm}
+
+\textbf{Invitation Code:} \texttt{ {{ invitation.code }} } \\[0.5cm]
+\vspace{1cm}
+\textit{Please bring this invitation with you to the event.}
+
+\end{center}
+
+\end{document}
