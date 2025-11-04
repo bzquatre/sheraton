@@ -23,6 +23,7 @@ from invitation.views import invitation_view,invitation_bulk_view
 urlpatterns = [
     path('', lambda request: redirect('app/invitation/invitation/', permanent=False)), 
     path('app/', lambda request: redirect('invitation/invitation/', permanent=False)), 
+    path('app/invitation/', lambda request: redirect('invitation/', permanent=False)),
     path('app/', admin.site.urls),
     path('invitation-pdf/<uuid:id>/',invitation_view,name="invitation-view"),
     path('invitation-pdf/bulk/',invitation_bulk_view, name='invitations_bulk_pdf')

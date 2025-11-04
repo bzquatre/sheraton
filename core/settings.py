@@ -155,6 +155,17 @@ LATEX_GRAPHICSPATH = [str(BASE_DIR /  env("LATEX_GRAPHICSPATH"))]
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media' 
 AUTH_USER_MODEL = 'invitation.Client'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'noreply.events.sheraton@gmail.com'
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
+DEFAULT_FROM_EMAIL = 'noreply.events.sheraton@gmail.com'
+
+
+
 JAZZMIN_SETTINGS = {
     # title of the window (Will default to current_admin_site.site_title if absent or None)
     "site_title": "Sheraton",

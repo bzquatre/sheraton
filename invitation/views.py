@@ -2,6 +2,8 @@ from django_tex.shortcuts import render_to_pdf
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from invitation.models import *
+from django.core.mail import send_mail
+from django.conf import settings
 # Create your views here.
 
 def invitation_view(request,id):
@@ -9,6 +11,13 @@ def invitation_view(request,id):
     context = {
         'invitation': invitation,
     }
+    """send_mail(
+        subject='Contact Form Submission',
+        message='A new message has been sent from your website!',
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        recipient_list=['bouzegzeg.zakaria@gmail.com'],
+        fail_silently=False,
+    )"""
     return render_to_pdf(request,'invitation.tex', context, filename=f"invitation_{invitation.code}.pdf")
 def invitation_bulk_view(request):
     """

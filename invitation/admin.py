@@ -6,9 +6,8 @@ from django.http import HttpResponseRedirect
 
 @admin.register(Client)
 class ClientAdmin(UserAdmin):
-
-    fieldsets = UserAdmin.fieldsets + (
-        ('Informations', {'fields': ('name', 'logo','number_of_guests')}),
+    fieldsets = (
+        (None, {'fields': ('email','name', 'logo','number_of_guests')}),
     )
     list_display = ('username', 'name', 'email', 'is_staff')
     list_filter = []
@@ -21,6 +20,7 @@ class InvitationAdmin(admin.ModelAdmin):
     search_fields = ('first_name', 'last_name', 'email')
     readonly_fields =('pdf',)
     actions = ['export_selected_to_pdf']
+    
     # 1️⃣ Limit visible records to only the current user's invitations
     def get_fields(self, request, obj = ...):
         if request.user.is_superuser:
