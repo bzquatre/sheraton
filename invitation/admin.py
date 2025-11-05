@@ -1,39 +1,13 @@
 from django.contrib import admin ,messages
-from django.contrib.auth.admin import UserAdmin
-from .models import Client, Invitation,Visitor
+from .models import  Invitation,Visitor
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.db import IntegrityError
 
-
-@admin.register(Client)
-class ClientAdmin(UserAdmin):
-    fieldsets = (
-        (None, {'fields': ('name','logo','number_of_guests')}),
-        ("Compte", {'fields': ('email', 'password')}),
-        ('Permissions', {'fields': ('is_staff', 'is_active', 'is_superuser', 'groups', 'user_permissions')}),
-    )
-    add_fieldsets = (
-        (None, {
-            'classes': ('wide',),
-            'fields': ('name','email', 'password1', 'password2',  'logo','number_of_guests')}
-        ),
-    )
-    list_display = ('email', 'name','number_of_guests' )
-    list_filter = []
-
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        if not request.user.is_superuser:
-            qs.filter(is_superuser=False)
-            if request.user.groups.filter(name="admins").exists():
-            # Show only users who belong to group "yyyyyy"
-                return qs.filter(groups__name="clients")
-        return qs
-
 @admin.register(Invitation)
 class InvitationAdmin(admin.ModelAdmin):
-    search_fields = ('first_name', 'last_name', 'email')
+    search_fields = ('name', 'number_of_guests', 'email')
+    list_display = ['name', 'number_of_guests', 'email','pdf']
     readonly_fields =('pdf',)
     actions = ['export_selected_to_pdf']
     
@@ -42,47 +16,9 @@ class InvitationAdmin(admin.ModelAdmin):
         if request.user.is_superuser:
             return super().get_fields(request, obj)
         else:
-            return ('first_name', 'last_name', 'email', 'job')
-    def get_list_display(self, request):
-        if request.user.is_superuser:
-            return('client','first_name', 'last_name', 'email', 'job','pdf')
-        else:
-            return ('first_name', 'last_name', 'email', 'job','pdf')
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        if request.user.is_superuser or request.user.groups.filter(name="admins").exists() or request.user.groups.filter(name="agents").exists():
-            return qs
+            return ('name', 'number_of_guests', 'email')
         
-        return qs.filter(client=request.user)
 
-    # 2️⃣ Automatically assign client when creating new
-    def save_model(self, request, obj, form, change):
-        if not request.user.is_superuser:  # when creating new
-            obj.client = request.user
-        obj.save()
-
-    # 3️⃣ Prevent adding more than number_of_guests
-    def has_add_permission(self, request):
-        if request.user.is_superuser:
-            return True
-        if not hasattr(request.user, 'number_of_guests'):
-            return False
-        current_count = Invitation.objects.filter(client=request.user).count()
-        return current_count < request.user.number_of_guests
-    def has_change_permission(self, request, obj = None):
-        if request.user.is_superuser:
-            return True
-        if obj is None:
-            return True  # Allow seeing list
-        visited = Visitor.objects.filter(guest=obj.id).count()
-        return visited == 0
-    def has_delete_permission(self, request, obj = None):
-        if request.user.is_superuser:
-            return True
-        if obj is None:
-            return True  # Allow seeing list
-        visited = Visitor.objects.filter(guest=obj.id).count()
-        return visited == 0
     def export_selected_to_pdf(self, request, queryset):
         ids = ",".join(str(obj.id) for obj in queryset)
         url = reverse('invitations_bulk_pdf') + f'?ids={ids}'

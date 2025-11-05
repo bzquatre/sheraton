@@ -11,8 +11,7 @@
 \pagestyle{empty}
 
 \begin{document}
-{% for invitation in invitations %}
-% --- Top Half: Image Banner ---
+{% for invitation in invitations %}% --- Top Half: Image Banner ---
 \begin{center}
     \vspace*{-1cm} % adjust if needed
     \includegraphics[width=\textwidth,height=0.40\textheight,keepaspectratio]{images/hotel.jpg}
@@ -28,11 +27,11 @@
     \includegraphics[width=2.5cm]{images/logo.png} &
     \begin{minipage}{0.5\textwidth}
         \centering
-        \Huge \textbf{ {{invitation.client.name}} } \\[0.3cm]
+        \Huge \textbf{ {{invitation.name}} } \\[0.3cm]
         \textcolor{gray}{\Large Carte d'invitation}
     \end{minipage} &
-    {% if invitation.client.logo %}
-    \includegraphics[width=2.5cm]{ {{ invitation.client.logo.url[7:] }} }
+    {% if invitation.logo %}
+    \includegraphics[width=2.5cm]{ {{ invitation.logo.url[7:] }} }
     {% endif %}
     
 \end{tabular}
@@ -42,7 +41,7 @@
 \begin{tikzpicture}
 \node[,rounded corners=10pt,inner sep=10pt]{
     \begin{minipage}{0.85\textwidth}
-        \large\textit{Cher(ère) \textbf{ {{ invitation.first_name }} {{ invitation.last_name }} },
+        \large\textit{Cher(ère) \textbf{ {{ invitation.name }}  },
 Nous avons le plaisir de vous inviter à l’événement organisé par Sheraton.
 Votre présence serait un véritable honneur et contribuerait au succès de cette occasion spéciale.
 }

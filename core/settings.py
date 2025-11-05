@@ -155,7 +155,7 @@ LATEX_GRAPHICSPATH = [str(BASE_DIR /  env("LATEX_GRAPHICSPATH_STATIC")),
                       str(BASE_DIR /  env("LATEX_GRAPHICSPATH_MEDIA"))]
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media' 
-AUTH_USER_MODEL = 'invitation.Client'
+AUTH_USER_MODEL = 'auth.User'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'

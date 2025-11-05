@@ -4,62 +4,6 @@ from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.utils.translation import gettext_lazy as _
 from django.utils.crypto import get_random_string
 from django.utils.safestring import mark_safe
-# ---------------------------
-# Custom Client User Model
-# ---------------------------
-class Client(AbstractUser):
-    class Meta:
-        verbose_name = "Client"
-        verbose_name_plural = "Clients"
-    id = models.UUIDField(
-        primary_key=True, 
-        default=uuid.uuid4, 
-        editable=False
-    )
-    username = models.CharField(null=True,blank=True,max_length=254)
-    name = models.CharField(_("Client Name"), max_length=100)
-    logo = models.ImageField(_("Logo"), upload_to='logos/', blank=True, null=True)
-    email = models.EmailField(_("Email"), unique=True)
-    number_of_guests = models.IntegerField(_("Nombre d'invités"), default=0)
-
-    # Ensure staff status true by default
-    is_staff = models.BooleanField(default=True)
-
-    groups = models.ManyToManyField(
-        Group,
-        related_name='client_users',
-        blank=True,
-        help_text='The groups this client belongs to.',
-    )
-
-    user_permissions = models.ManyToManyField(
-        Permission,
-        related_name='client_users',
-        blank=True,
-        help_text='Specific permissions for this client.',
-    )
-
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['name']
-
-    def save(self, *args, **kwargs):
-        # Ensure is_staff is True by default
-        if self.is_staff is None:
-            self.is_staff = True
-
-        super().save(*args, **kwargs)
-
-        # Automatically add to "clients" group
-        try:
-            group, created = Group.objects.get_or_create(name="clients")
-            self.groups.add(group)
-        except Exception:
-            # Avoid crash during first migrations
-            pass
-
-    def __str__(self):
-        return self.name or self.username
-
 
 # ---------------------------
 # invitation Model
@@ -70,11 +14,10 @@ class Invitation(models.Model):
         default=uuid.uuid4, 
         editable=False
     )
-    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='invitations')
-    first_name = models.CharField(verbose_name="Prénom" ,max_length=100)
-    last_name = models.CharField(verbose_name="Nom" ,max_length=100)
+    name = models.CharField(_("Client Name"), max_length=100)
+    number_of_guests = models.IntegerField(_("Nombre d'invités"), default=0)
+    logo = models.ImageField(_("Logo"), upload_to='logos/', blank=True, null=True)
     email = models.EmailField()
-    job = models.CharField(verbose_name="Fonction" ,max_length=100)
     code = models.CharField(verbose_name="Code" ,max_length=20, unique=True, editable=False)
 
     def save(self, *args, **kwargs):
@@ -98,7 +41,8 @@ class Visitor(models.Model):
     class Meta:
         verbose_name = "Visiteur"
         verbose_name_plural = "Visiteurs"
-    guest = models.OneToOneField(Invitation,verbose_name="Invité", on_delete=models.CASCADE)
+    guest = models.ForeignKey(Invitation,verbose_name="Invité", on_delete=models.CASCADE)
+    name = models.CharField(_("Client Name"), max_length=100)
     date = models.DateField(auto_now_add=True)
     time = models.TimeField(auto_now_add=True,verbose_name="Temp")
     
