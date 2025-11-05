@@ -21,6 +21,8 @@ class Invitation(models.Model):
     email = models.EmailField()
 
     def save(self, *args, **kwargs):
+        if self.pk :
+            InvitationItems.objects.filter(invitation=self).delete()
         super().save(*args, **kwargs)
         for _ in range(self.number_of_guests):
             InvitationItems.objects.create(invitation=self)
