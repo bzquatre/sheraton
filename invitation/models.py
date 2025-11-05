@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.crypto import get_random_string
 from django.utils.safestring import mark_safe
 from django.core.exceptions import ValidationError
+from django.contrib.auth.models import User
 # ---------------------------
 # invitation Model
 # ---------------------------
@@ -28,7 +29,8 @@ class Invitation(models.Model):
                     self.code = new_code
                     break
         super().save(*args, **kwargs)
-
+    def  nombre_visiteurs(self):
+        return self.visitor_set.count()
 
     def pdf(self):
         return mark_safe(f'<a target="_blank"  href="/invitation-pdf/{self.id}/"><i class="fa fa-file-pdf"></i></a>')
@@ -40,8 +42,8 @@ class Visitor(models.Model):
     class Meta:
         verbose_name = "Visiteur"
         verbose_name_plural = "Visiteurs"
+    user = models.ForeignKey(User, on_delete=models.CASCADE,verbose_name="Agent", null=True)
     guest = models.ForeignKey(Invitation,verbose_name="Invité", on_delete=models.CASCADE)
-    name = models.CharField(_("Client Name"), max_length=100)
     date = models.DateField(auto_now_add=True)
     time = models.TimeField(auto_now_add=True,verbose_name="Temp")
     def clean(self):

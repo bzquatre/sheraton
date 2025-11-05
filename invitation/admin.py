@@ -6,8 +6,8 @@ from django.core.exceptions import ValidationError
 
 @admin.register(Invitation)
 class InvitationAdmin(admin.ModelAdmin):
-    search_fields = ('name', 'number_of_guests', 'email')
-    list_display = ['name', 'number_of_guests', 'email','pdf']
+    search_fields = ('name', 'email')
+    list_display = ['name', 'number_of_guests','nombre_visiteurs', 'email','pdf']
     readonly_fields =('pdf',)
     actions = ['export_selected_to_pdf']
     
@@ -29,8 +29,8 @@ class InvitationAdmin(admin.ModelAdmin):
 
 @admin.register(Visitor)
 class VisitorAdmin(admin.ModelAdmin):
-    list_display= ('guest','name','guest_name','time')
-    list_editable = ['name']
+    fields = ['guest']
+    list_display= ('guest','guest_name','time','user')
     search_fields = ['guest__code','pk']
     search_help_text = "Scan a QR code to check and log the visitor."
     class Media:
@@ -53,7 +53,7 @@ class VisitorAdmin(admin.ModelAdmin):
                 try:
                     
                         # Log the scan
-                        visitor=Visitor.objects.create(guest=match)
+                        visitor=Visitor.objects.create(guest=match,user=request.user)
 
                         # Show success message in Django admin
                         self.message_user(
@@ -75,8 +75,9 @@ class VisitorAdmin(admin.ModelAdmin):
                         return super().get_search_results(request, queryset, search_term)
 
         
-
-        
+    def save_model(self, request, obj, form, change):
+        obj.user =request.user
+        return super().save_model(request, obj, form, change)
         
     def guest_name(self, obj):
         return obj.guest.name
