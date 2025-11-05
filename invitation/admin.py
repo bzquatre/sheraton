@@ -27,6 +27,8 @@ class VisitorAdmin(admin.ModelAdmin):
     search_help_text = "Scan a QR code to check and log the visitor."
     class Media:
         js = ('js/clear_search.js',)
+    def has_change_permission(self, request, obj = ...):
+        return False
     def get_search_results(self, request, queryset, search_term):
         # Show error message if not found
         if not search_term or search_term=="" :
@@ -58,7 +60,8 @@ class VisitorAdmin(admin.ModelAdmin):
                 )
                 return super().get_search_results(request, queryset, visitor.pk)
 
-
+    def has_change_permission(self, request, obj = ...):
+        return False
         
     def save_model(self, request, obj, form, change):
         obj.user =request.user
