@@ -18,7 +18,7 @@ class Invitation(models.Model):
     name = models.CharField(_("Client Name"), max_length=100)
     number_of_guests = models.IntegerField(_("Nombre d'invités"), default=0)
     logo = models.ImageField(_("Logo"), upload_to='logos/', blank=True, null=True)
-    email = models.EmailField()
+    email = models.EmailField( blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if self.pk :
