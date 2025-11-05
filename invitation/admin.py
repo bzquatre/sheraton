@@ -1,14 +1,13 @@
 from django.contrib import admin ,messages
-from django.utils import timezone
 from django.contrib.auth.admin import UserAdmin
 from .models import Client, Invitation,Visitor
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.db import IntegrityError
 
+
 @admin.register(Client)
 class ClientAdmin(UserAdmin):
-
     fieldsets = (
         (None, {'fields': ('name','logo','number_of_guests')}),
         ("Compte", {'fields': ('email', 'password')}),
@@ -22,9 +21,15 @@ class ClientAdmin(UserAdmin):
     )
     list_display = ('email', 'name','number_of_guests' )
     list_filter = []
+
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return qs.filter(is_superuser=False)
+        if not request.user.is_superuser:
+            qs.filter(is_superuser=False)
+            if request.user.groups.filter(name="admins").exists():
+            # Show only users who belong to group "yyyyyy"
+                return qs.filter(groups__name="clients")
+        return qs
 
 @admin.register(Invitation)
 class InvitationAdmin(admin.ModelAdmin):
@@ -40,13 +45,14 @@ class InvitationAdmin(admin.ModelAdmin):
             return ('first_name', 'last_name', 'email', 'job')
     def get_list_display(self, request):
         if request.user.is_superuser:
-            return('client','first_name', 'last_name', 'email', 'job')
+            return('client','first_name', 'last_name', 'email', 'job','pdf')
         else:
             return ('first_name', 'last_name', 'email', 'job','pdf')
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        if request.user.is_superuser:
+        if request.user.is_superuser or request.user.groups.filter(name="admins").exists() or request.user.groups.filter(name="agents").exists():
             return qs
+        
         return qs.filter(client=request.user)
 
     # 2️⃣ Automatically assign client when creating new

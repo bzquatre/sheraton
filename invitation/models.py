@@ -16,6 +16,7 @@ class Client(AbstractUser):
         default=uuid.uuid4, 
         editable=False
     )
+    username = models.CharField(null=True,blank=True,max_length=254)
     name = models.CharField(_("Client Name"), max_length=100)
     logo = models.ImageField(_("Logo"), upload_to='logos/', blank=True, null=True)
     email = models.EmailField(_("Email"), unique=True)
