@@ -1,10 +1,9 @@
 import uuid
 from django.db import models
-from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.utils.translation import gettext_lazy as _
 from django.utils.crypto import get_random_string
 from django.utils.safestring import mark_safe
-
+from django.core.exceptions import ValidationError
 # ---------------------------
 # invitation Model
 # ---------------------------
@@ -45,4 +44,12 @@ class Visitor(models.Model):
     name = models.CharField(_("Client Name"), max_length=100)
     date = models.DateField(auto_now_add=True)
     time = models.TimeField(auto_now_add=True,verbose_name="Temp")
+    def clean(self):
+        # Count how many visitors are already linked
+        if self.guest.visitor_set.count() >= self.guest.number_of_guests:
+            raise ValidationError(f"This invitation already has the maximum number of visitors ({self.guest.number_of_guests}).")
+
+    def save(self, *args, **kwargs):
+        self.clean()  # validate before saving
+        super().save(*args, **kwargs)
     
