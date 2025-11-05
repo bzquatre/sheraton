@@ -11,7 +11,7 @@
 \pagestyle{empty}
 
 \begin{document}
-{% for invitation in invitations %}% --- Top Half: Image Banner ---
+{% for invitationitem in invitation_item %}% --- Top Half: Image Banner ---
 \begin{center}
     \vspace*{-1cm} % adjust if needed
     \includegraphics[width=\textwidth,height=0.40\textheight,keepaspectratio]{images/hotel.jpg}
@@ -54,10 +54,10 @@ Votre présence serait un véritable honneur et contribuerait au succès de cett
 \end{tikzpicture}
 
 \vspace{1cm}
-\qrcode[height=4cm]{ {{ invitation.code }} }
+\qrcode[height=4cm]{ {{ invitationitem.code }} }
 \vspace{1cm}
 
-\textbf{Code d'invitation:} \texttt{ {{ invitation.code }} } \\
+\textbf{Code d'invitation:} \texttt{ {{ invitationitem.code }} } \\
 \textit{Nous vous prions d’apporter cette invitation lors de votre arrivée.}
 
 \end{center}

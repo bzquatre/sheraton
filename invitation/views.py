@@ -8,17 +8,12 @@ from django.conf import settings
 
 def invitation_view(request,id):
     invitation = get_object_or_404(Invitation, pk=id)
+    invitation_item =InvitationItems.objects.filter(invitation=invitation).all()
     context = {
         'invitation': invitation,
+        'invitation_item':invitation_item,
     }
-    """send_mail(
-        subject='Contact Form Submission',
-        message='A new message has been sent from your website!',
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        recipient_list=['bouzegzeg.zakaria@gmail.com'],
-        fail_silently=False,
-    )"""
-    return render_to_pdf(request,'invitation.tex', context, filename=f"invitation_{invitation.code}.pdf")
+    return render_to_pdf(request,'invitation_list.tex', context, filename=f"invitation_{invitation.name}.pdf")
 def invitation_bulk_view(request):
     """
     Generate one PDF containing multiple invitations.
