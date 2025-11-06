@@ -23,7 +23,7 @@ def invitation_view_confirmation(request, code):
     invitation_item = get_object_or_404(InvitationItems, code=code)
     
     # Get all related invitation items
-    invitation = Invitation.objects.filter(id=invitation_item.invitation_id)
+    invitation = Invitation.objects.filter(id=invitation_item.invitation_id).first()
     
     context = {
         'invitation': invitation,
