@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-import environ
+import environ,dj_database_url
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -91,14 +91,10 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": env("SQL_ENGINE"),
-        "NAME": env("SQL_DATABASE") if  env("SQL_DATABASE")!="db.sqlite3" else BASE_DIR / "db.sqlite3",
-        "USER": env("SQL_USER"),
-        "PASSWORD": env("SQL_PASSWORD"),
-        "HOST": env("SQL_HOST"),
-        "PORT": env("SQL_PORT"),
-    }
+    "default": dj_database_url.parse(
+        env("DATABASE_URL",default=f"sqlite:///{ BASE_DIR / 'db.sqlite3'}"),
+        conn_max_age=600
+    )
 }
 
 
