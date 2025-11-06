@@ -12,7 +12,7 @@
 {% graphicspath %}
 
 \setmainfont[
-    Path =/home/sheratonevents/sheraton/staticfiles/fonts/,
+    Path ={{ FONTS_DIR }},
     UprightFont = *-Bold
 ]{Aptos}
 \pagestyle{empty}
@@ -25,9 +25,11 @@
 \end{center}
 
 
+{% if invitation.logo %}
 \begin{center}
     \includegraphics[width=0.22\textwidth,height=0.18\textheight,keepaspectratio]{ {{ invitation.logo.url[7:] }} }
 \end{center}
+{% endif %}
 % --- Bottom Half: Invitation Information ---
 \begin{center}
 

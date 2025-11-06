@@ -1,5 +1,6 @@
 import io, zipfile
 from django.http import HttpResponse
+from django.conf import settings
 from django.shortcuts import get_object_or_404
 from .models import Invitation, InvitationItems
 from django_tex.shortcuts import render_to_pdf
@@ -13,6 +14,7 @@ def invitation_view(request, id):
     
     context = {
         'invitation': invitation,
+        'FONTS_DIR':str(settings.BASE_DIR).replace('\\','/') + "/staticfiles/fonts/",
         'items': invitation_items,  # single item for this PDF
     }
     # Render the PDF for this item
@@ -27,6 +29,7 @@ def invitation_view_confirmation(request, code):
     
     context = {
         'invitation': invitation,
+        'FONTS_DIR':str(settings.BASE_DIR).replace('\\','/') + "/staticfiles/fonts/",
         'item': invitation_item,  # single item for this PDF
     }
     # Render the PDF for this item
@@ -50,6 +53,7 @@ def invitation_zip_view(request, id):
         for i,item in enumerate(invitation_items):
             context = {
                 'invitation': invitation,
+                'FONTS_DIR':str(settings.BASE_DIR).replace('\\','/') + "/staticfiles/fonts/",
                 'item': item,  # single item for this PDF
             }
             # Render the PDF for this item
