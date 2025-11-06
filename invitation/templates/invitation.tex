@@ -7,43 +7,61 @@
 \usepackage{fontspec}
 \usepackage{qrcode}
 \usepackage{fancyhdr}
+
+% Set default font to Aptos
 {% graphicspath %}
+
+\setmainfont[
+    Path =/home/sheratonevents/sheraton/staticfiles/fonts/,
+    UprightFont = *-Bold
+]{Aptos}
 \pagestyle{empty}
 
 \begin{document}
 {% for item in items %}
 % --- Top Half: Image Banner ---
 \begin{center}
-    \vspace*{-1cm} % adjust if needed
-    \includegraphics[width=\textwidth,height=0.40\textheight,keepaspectratio]{images/Header.jpg}
+    \vspace*{1cm} % adjust if needed
+    \includegraphics[width=0.9\textwidth,height=0.30\textheight,keepaspectratio]{images/Header.jpg}
 \end{center}
 
-\vspace{0.5cm} % space between image and info
 
+\begin{center}
+    \includegraphics[width=0.1\textwidth,height=0.1\textheight,keepaspectratio]{ {{ invitation.logo.url[7:] }} }
+\end{center}
 % --- Bottom Half: Invitation Information ---
 \begin{center}
 
-    \begin{center}
-        \Large \textbf{ GLOBAL CUSTOMER APPRECIATION WEEK } \\[0.3cm]
-        \Huge \textbf{ INVITATION } \\[0.3cm]
-        \Large\textbf{📅 Date : } JEUDI 13 NOVEMBRE 2025 \\
-        \Large\textbf{🕒 Heure : } 18H 30 \\
-        \vspace{0.5cm}
-        SHERATON CLUB DES PINS RESORT\\
-        \Large\textbf{📍LOCALISATION } : MEZZANINE \\
-    \end{center}
+    
+        \Huge\textbf{ INVITATION } \\[0.3cm]
+        \large\textbf{ GLOBAL CUSTOMER APPRECIATION WEEK } \\[0.3cm]
+        \noindent
+        \hspace*{2cm}% 
+        \begin{minipage}[t]{0.5\textwidth}  % Left column (60% width)
+            \vspace{0pt} % Align tops
+            \normalsize\textbf{ DATE : } JEUDI 13 NOVEMBRE 2025 \\
+            \normalsize\textbf{ HEURE : } 19H 30 \\
+            \vspace{1cm}\\
+            \normalsize{SHERATON CLUB DES PINS RESORT}\\
+            \normalsize\textbf{LOCALISATION } : MEZZANINE \\
+
+        \end{minipage}
+        \hfill
+        \begin{minipage}[t]{0.35\textwidth}  % Right column (35% width)
+            \vspace{0pt}
+            \centering
+            \qrcode[height=3cm]{ https://sheratonevents.pythonanywhere.com/invitation-confirmation/{{ item.code }}/ }\\
+            \vspace{1cm}
+            \scriptsize{(*) ACCES EXCLUSIF SUR INVITATION}\\ 
+            \scriptsize{AVEC VALIDATION PAR QR CODE.}\\
+        \end{minipage}
 
 
-\vspace{0.5cm}
-\qrcode[height=4cm]{ {{ item.code }} }\\
-\vspace{0.5cm}
-\textbf{Code d'invitation:} \texttt{ {{ item.code }} } \\
-\vspace{0.5cm}
- \textit{(*) ACCES EXCLUSIF SUR INVITATION AVEC VALIDATION PAR QR CODE.}\\
+
  \vspace{1cm}
  \begin{center}
     \vspace*{-1cm} % adjust if needed
-    \includegraphics[width=0.95\textwidth,height=0.30\textheight,keepaspectratio]{images/Footer.png}
+    \includegraphics[width=0.8\textwidth,height=0.30\textheight,keepaspectratio]{images/Footer.png}
 \end{center}
 \end{center}
 \newpage

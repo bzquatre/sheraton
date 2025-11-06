@@ -18,6 +18,21 @@ def invitation_view(request, id):
     # Render the PDF for this item
     return  render_to_pdf(request, 'invitation.tex', context)
 
+def invitation_view_confirmation(request, code):
+    # Get the invitation or return 404 if not found
+    invitation_item = get_object_or_404(InvitationItems, code=code)
+    
+    # Get all related invitation items
+    invitation = Invitation.objects.filter(id=invitation_item.invitation_id)
+    
+    context = {
+        'invitation': invitation,
+        'item': invitation_item,  # single item for this PDF
+    }
+    # Render the PDF for this item
+    return  render_to_pdf(request, 'invitation_confermation.tex', context)
+
+
     
 def invitation_zip_view(request, id):
     # Get the invitation or return 404 if not found

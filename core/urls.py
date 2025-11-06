@@ -19,12 +19,13 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from django.shortcuts import redirect
-from invitation.views import invitation_view,invitation_zip_view
+from invitation.views import invitation_view,invitation_zip_view,invitation_view_confirmation
 urlpatterns = [
     path('', lambda request: redirect('app/invitation/invitation/', permanent=False)), 
     path('app/', lambda request: redirect('invitation/invitation/', permanent=False)), 
     path('app/invitation/', lambda request: redirect('invitation/', permanent=False)),
     path('app/', admin.site.urls),
+    path('invitation-confirmation/<str:code>/',invitation_view_confirmation,name="invitation-confirmation"),
     path('invitation-pdf/<uuid:id>/',invitation_view,name="invitation-view"),
     path('invitation-zip-pdf/<uuid:id>/',invitation_zip_view, name='invitations_zip_pdf')
 ]
