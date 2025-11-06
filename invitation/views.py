@@ -47,7 +47,7 @@ def invitation_zip_view(request, id):
     # Open ZIP file in memory
     with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
         # Generate one PDF per invitation item
-        for item in invitation_items:
+        for i,item in enumerate(invitation_items):
             context = {
                 'invitation': invitation,
                 'item': item,  # single item for this PDF
@@ -56,7 +56,7 @@ def invitation_zip_view(request, id):
             pdf = render_to_pdf(request, 'invitation_list.tex', context)
             
             # Create a filename for each PDF (example: "Guest_1.pdf")
-            pdf_filename = f"{invitation.name}_{item.id}.pdf"
+            pdf_filename = f"{invitation.name}_invitation_{i}.pdf"
             
             # Write PDF bytes into ZIP file
             zip_file.writestr(pdf_filename, pdf.content)
