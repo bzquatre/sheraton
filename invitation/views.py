@@ -16,7 +16,7 @@ def invitation_view(request, id):
         'items': invitation_items,  # single item for this PDF
     }
     # Render the PDF for this item
-    return  render_to_pdf(request, 'invitation.tex', context)
+    return  render_to_pdf(request, 'invitation.tex', context,filename=f"{invitation.name}")
 
 def invitation_view_confirmation(request, code):
     # Get the invitation or return 404 if not found
@@ -30,7 +30,7 @@ def invitation_view_confirmation(request, code):
         'item': invitation_item,  # single item for this PDF
     }
     # Render the PDF for this item
-    return  render_to_pdf(request, 'invitation_confermation.tex', context)
+    return  render_to_pdf(request, 'invitation_confermation.tex', context,filename=f"{invitation.name}")
 
 
     
