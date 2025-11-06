@@ -32,7 +32,9 @@ class Invitation(models.Model):
 
     def pdf(self):
         return mark_safe(f'<a target="_blank"  href="/invitation-pdf/{self.id}/"><i class="fa fa-file-pdf"></i></a>')
-    
+    def zip(self):
+        return mark_safe(f'<a target="_blank"  href="/invitation-zip-pdf/{self.id}/"><i class="fa fa-folder"></i></a>')
+   
     def __str__(self):
         return f"{self.name}"
 

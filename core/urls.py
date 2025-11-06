@@ -19,14 +19,14 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from django.shortcuts import redirect
-from invitation.views import invitation_view,invitation_bulk_view
+from invitation.views import invitation_view,invitation_zip_view
 urlpatterns = [
     path('', lambda request: redirect('app/invitation/invitation/', permanent=False)), 
     path('app/', lambda request: redirect('invitation/invitation/', permanent=False)), 
     path('app/invitation/', lambda request: redirect('invitation/', permanent=False)),
     path('app/', admin.site.urls),
     path('invitation-pdf/<uuid:id>/',invitation_view,name="invitation-view"),
-    path('invitation-pdf/bulk/',invitation_bulk_view, name='invitations_bulk_pdf')
+    path('invitation-zip-pdf/<uuid:id>/',invitation_zip_view, name='invitations_zip_pdf')
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

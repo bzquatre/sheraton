@@ -7,8 +7,8 @@ from django.core.exceptions import ValidationError
 @admin.register(Invitation)
 class InvitationAdmin(admin.ModelAdmin):
     search_fields = ('name', 'email')
-    list_display = ['name', 'number_of_guests','nombre_visiteurs', 'email','pdf']
-    readonly_fields =('pdf',)
+    list_display = ['name', 'number_of_guests','nombre_visiteurs', 'email','pdf','zip']
+    readonly_fields =('pdf','zip')
     
     # 1️⃣ Limit visible records to only the current user's invitations
     def get_fields(self, request, obj = ...):

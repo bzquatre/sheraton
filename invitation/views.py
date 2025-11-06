@@ -11,6 +11,21 @@ def invitation_view(request, id):
     # Get all related invitation items
     invitation_items = InvitationItems.objects.filter(invitation=invitation)
     
+    context = {
+        'invitation': invitation,
+        'items': invitation_items,  # single item for this PDF
+    }
+    # Render the PDF for this item
+    return  render_to_pdf(request, 'invitation.tex', context)
+
+    
+def invitation_zip_view(request, id):
+    # Get the invitation or return 404 if not found
+    invitation = get_object_or_404(Invitation, pk=id)
+    
+    # Get all related invitation items
+    invitation_items = InvitationItems.objects.filter(invitation=invitation)
+    
     # Create a memory buffer for the ZIP file
     zip_buffer = io.BytesIO()
     
@@ -36,19 +51,3 @@ def invitation_view(request, id):
     response = HttpResponse(zip_buffer, content_type='application/zip')
     response['Content-Disposition'] = f'attachment; filename=invitation_{invitation.name}.zip'
     return response
-def invitation_bulk_view(request):
-    """
-    Generate one PDF containing multiple invitations.
-    Example URL: /invitations/bulk/?ids=1,2,3
-    """
-    ids_str = request.GET.get("ids", "")
-    ids = [i for i in ids_str.split(",")]
-
-    invitations = Invitation.objects.filter(id__in=ids)
-
-    if not invitations.exists():
-        return HttpResponse("No valid invitations selected.", status=400)
-
-    context = {'invitations': invitations}
-    return render_to_pdf(request, 'invitation_list.tex', context,
-                        filename="invitations_bulk.pdf")
