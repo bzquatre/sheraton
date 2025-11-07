@@ -19,13 +19,35 @@ class Invitation(models.Model):
     number_of_guests = models.IntegerField(_("Nombre d'invités"), default=0)
     logo = models.ImageField(_("Logo"), upload_to='logos/', blank=True, null=True)
     email = models.EmailField( blank=True, null=True)
-
+    def clean(self):
+        """Runs automatically in admin when saving a form."""
+        if self.pk:
+            try:
+                old = Invitation.objects.get(pk=self.pk)
+            except:
+                pass
+            else:
+                if self.number_of_guests < old.number_of_guests:
+                    raise ValidationError(
+                        "❌ Vous ne pouvez pas diminuer le nombre d'invités. "
+                        "Veuillez supprimer l'invitation et en créer une nouvelle."
+                    )
     def save(self, *args, **kwargs):
-        if self.pk :
-            InvitationItems.objects.filter(invitation=self).delete()
-        super().save(*args, **kwargs)
-        for _ in range(self.number_of_guests):
-            InvitationItems.objects.create(invitation=self)
+        self.full_clean()
+        try:
+            old = Invitation.objects.get(pk=self.pk)
+        except:
+            x = super().save(*args, **kwargs)
+            for _ in range(self.number_of_guests):
+                InvitationItems.objects.create(invitation=self)
+            return x
+        else:
+            guest_add = self.number_of_guests - old.number_of_guests
+            for _ in range(guest_add):
+                InvitationItems.objects.create(invitation=self)
+            return super().save(*args, **kwargs)
+
+            
         
     def  nombre_visiteurs(self):
         return InvitationItems.objects.filter(invitation=self, visitor__isnull=False).count()

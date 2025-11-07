@@ -17,6 +17,7 @@ class InvitationAdmin(admin.ModelAdmin):
             return super().get_fields(request, obj)
         else:
             return ('name','logo', 'number_of_guests', 'email')
+
         
     
 
