@@ -21,9 +21,9 @@ from django.conf.urls.static import static
 from django.shortcuts import redirect
 from invitation.views import invitation_view,invitation_zip_view,invitation_view_confirmation
 urlpatterns = [
-    path('', lambda request: redirect('app/invitation/invitation/', permanent=False)), 
-    path('app/', lambda request: redirect('invitation/invitation/', permanent=False)), 
-    path('app/invitation/', lambda request: redirect('invitation/', permanent=False)),
+    path('', lambda request: redirect('app/invitation/visitor/', permanent=False)), 
+    path('app/', lambda request: redirect('invitation/visitor/', permanent=False)), 
+    path('app/invitation/', lambda request: redirect('visitor/', permanent=False)),
     path('app/', admin.site.urls),
     path('invitation-confirmation/<str:code>/',invitation_view_confirmation,name="invitation-confirmation"),
     path('invitation-pdf/<uuid:id>/',invitation_view,name="invitation-view"),
