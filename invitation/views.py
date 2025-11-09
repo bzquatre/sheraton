@@ -30,10 +30,10 @@ def invitation_view_confirmation(request, code):
     context = {
         'invitation': invitation,
         'FONTS_DIR':str(settings.BASE_DIR).replace('\\','/') + "/staticfiles/fonts/",
-        'item': invitation_item,  # single item for this PDF
+        'items': [invitation_item],  
     }
     # Render the PDF for this item
-    return  render_to_pdf(request, 'invitation_confermation.tex', context,filename=f"{invitation.name}")
+    return  render_to_pdf(request, 'invitation.tex', context,filename=f"{invitation.name}")
 
 
     
@@ -54,10 +54,10 @@ def invitation_zip_view(request, id):
             context = {
                 'invitation': invitation,
                 'FONTS_DIR':str(settings.BASE_DIR).replace('\\','/') + "/staticfiles/fonts/",
-                'item': item,  # single item for this PDF
+                'items': [item],  # single item for this PDF
             }
             # Render the PDF for this item
-            pdf = render_to_pdf(request, 'invitation_list.tex', context)
+            pdf = render_to_pdf(request, 'invitation.tex', context)
             
             # Create a filename for each PDF (example: "Guest_1.pdf")
             pdf_filename = f"{invitation.name}_invitation_{i+1}.pdf"

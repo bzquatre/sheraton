@@ -1,54 +1,30 @@
-\documentclass[12pt,a4paper]{article}
-\usepackage[margin=0cm]{geometry}
-\usepackage{graphicx}
-\usepackage{setspace}
-\usepackage{xcolor}
-\usepackage{tikz}
-\usepackage{fontspec}
-\usepackage{qrcode}
-\usepackage{fancyhdr}
-
-% Set default font to Aptos
-{% graphicspath %}
-
-\setmainfont[
-    Path ={{ FONTS_DIR }},
-    UprightFont = *-Bold
-]{Aptos}
-\pagestyle{empty}
-
-\begin{document}
+{% extends "base.tex" %}
+{% block content %}
 {% for item in items %}
-% --- Top Half: Image Banner ---
 \begin{center}
-    \vspace*{1cm} % adjust if needed
+    \vspace*{1cm} 
     \includegraphics[width=0.9\textwidth,height=0.30\textheight,keepaspectratio]{images/Header.jpg}
 \end{center}
-
 {% if invitation.logo %}
 \begin{center}
     \includegraphics[width=0.22\textwidth,height=0.18\textheight,keepaspectratio]{ {{ invitation.logo.url[7:] }} }
 \end{center}
 {% endif %}
-% --- Bottom Half: Invitation Information ---
 \begin{center}
-
-    
         \Huge\textbf{ INVITATION } \\[0.3cm]
         \large\textbf{ GLOBAL CUSTOMER APPRECIATION WEEK } \\[0.3cm]
         \noindent
-        \hspace*{2cm}% 
-        \begin{minipage}[t]{0.5\textwidth}  % Left column (60% width)
-            \vspace{0pt} % Align tops
+        \hspace*{2cm}
+        \begin{minipage}[t]{0.5\textwidth} 
+            \vspace{0pt}
             \normalsize\textbf{DATE : } Vendredi 14 Novembre 2025 \\
             \normalsize\textbf{ HEURE : } 19H00 \\
             \vspace{1cm}\\
             \normalsize{SHERATON CLUB DES PINS RESORT}\\
             \normalsize\textbf{LOCALISATION } : MEZZANINE \\
-
         \end{minipage}
         \hfill
-        \begin{minipage}[t]{0.35\textwidth}  % Right column (35% width)
+        \begin{minipage}[t]{0.35\textwidth}  
             \vspace{0pt}
             \centering
             \qrcode[height=3cm]{ https://sheratonevents.pythonanywhere.com/invitation-confirmation/{{ item.code }}/ }\\
@@ -57,15 +33,12 @@
             \scriptsize{AVEC VALIDATION PAR QR CODE.}\\
             \scriptsize{INVITATION VALABLE POUR DEUX PERSONNES}\\
         \end{minipage}
-
-
-
  \vspace{1cm}
  \begin{center}
-    \vspace*{-1cm} % adjust if needed
+    \vspace*{-1cm}
     \includegraphics[width=0.8\textwidth,height=0.30\textheight,keepaspectratio]{images/Footer.png}
 \end{center}
 \end{center}
 \newpage
 {% endfor %}
-\end{document}
+{% endblock %}

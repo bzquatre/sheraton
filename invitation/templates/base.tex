@@ -1,0 +1,18 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[margin=0cm]{geometry}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{fontspec}
+\usepackage{qrcode}
+\usepackage{fancyhdr}
+{% graphicspath %}
+\setmainfont[
+    Path ={{ FONTS_DIR }},
+    UprightFont = *-Bold
+]{Aptos}
+\pagestyle{empty}
+\begin{document}
+{% block content %}{% endblock %}
+\end{document}
